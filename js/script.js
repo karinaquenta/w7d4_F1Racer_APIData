@@ -9,61 +9,60 @@ const roundInput = document.getElementById('roundInput')
 async function racerApiCall(season, round){
     const res = await fetch(`https://ergast.com/api/f1/${season}/${round}/driverstandings.json`,{
         method:"Get",
-        headers:{
-            'Content-Type': 'application/json'
-        }
+        // headers:{
+        //     'Content-Type': 'application/json'
+        // }
     })
     if (res.ok){
         const data = await res.json()
-        return data.MRData.StandingsTable.StandingsLists[0].DriverStandings[0].Driver.url
+        for (racer of data.MRData.StandingsTable.StandingsLists[0].DriverStandings.slice(0,7)){
+            handleRacerData(racer)
+        }
     } 
-    const driverTableInfo = document.getElementById('driverTableMain')
-    driverTableInfo.innerHTML = ''
+
     }
 
-// const aside=document.querySelector('.aside')
-// //aside.style.display='flex'
-// aside.style.columnGap='10px'
-// aside.style.flexWrap='wrap'
+//promise, we have to await
+function handleRacerData({position,points,Driver:{givenName,familyName,nationality},Constructors:[{constructorId}]}){
+    console.log(position, points,givenName,familyName,nationality,constructorId)
+    const td = document.createElement('td')
+    td.classList.add('className')
+    const tdRacerName = document.createElement('td')
+    const tdNationality = document.createElement('td')
+    const tdConstructorId = document.createElement('td')
+    const tdPoints = document.createElement('td')
 
-async function handleRacerData({ season, round, DriverStandings:{Driver,Constructors} }){
-    const div = document.createElement('div')
-    div.classList.add('className')
-    const racerName = document.createElement('racerName')
-    const nationality = document.createElement('nationality')
-    const sponsor = document.createElement('sponsor')
-    const points = document.createElement('points')
+    //create row then append that row into const driver table info
+    const row=document.createElement('tr')
 
-    const url = await racerApiCall(season,round)
+    td.innerHTML = position
+    tdRacerName.innerHTML = givenName + familyName
+    tdNationality.innerHTML = nationality
+    tdConstructorId.innerHTML = constructorId
+    tdPoints.innerHTML = points
 
-    div.innerHTML = Constructors['position']
-    racerName.innerHTML = Driver['givenName']
-    nationality.innerHTML = Driver['nationality']
-    sponsor.innerHTML = Driver['constructorId']
-    points.innerHTML = Constructors['position']
+    const driverTableInfo = document.getElementById('driverTableMain')
+    row.append(td,tdRacerName, tdNationality, tdConstructorId,tdPoints)
+    driverTableInfo.append(row)
+//replace with row
 
-    div.append(racerName,nationality, sponsor, points)
+}
 
-    const aside = document.getElementById('racerInfo')
-    aside.appendChild(div)
-    //im getting the form elements from DOM
-    const form = document.getElementById('racerForm')
-    
-    //this is my event listener to the form when submitting
-    racerForm.addEventListener('submit', async (event)=>{
+ //this is my event listener to the form when submitting/triggers it
+ racerForm.addEventListener('submit', async (event)=>{
     event.preventDefault()
     //const Year = yearInput()
     //const Round = roundInput()
     //await handleRacerData('Year','Round')
     //yearInput() = ''
     //roundInput()= ''
-
+ 
     //this is form info with the season & round
     const seasonInput = document.getElementById('seasonInput')
     const roundInput = document.getElementById('roundInput')
     const season = seasonInput.value
     const round = roundInput.value
 
-    racerApiCall(season,round)
+    //step 2
+    await racerApiCall(season,round)
 })
-}
