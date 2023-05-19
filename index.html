@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./static/main.css">
+    <script src="./js/script.js" defer></script>
+</head>
+<body>
+    <main class="container">
+    <h1 class="centered-text">Racer Data</h1>
+    <aside class="aside"></aside>
+    </main>
+    <form action="" id="racerForm">
+        <label for="seasonInput"><strong>Season: </strong></label>
+        <input type="text" id="seasonInput" placeholder="" required>
+        <label for="roundInput"><strong>Round: </strong></label>
+        <input type="text" id="roundInput" placeholder="" required>
+
+        <button type="submit" class="btn btn-primary"><strong>Get Standings</strong></button>
+    </form>
+    <table id="driverTable">
+        <thead>
+            <tr><br>
+                <th>Position</th>
+                <th>Name</th>
+                <th>Nationality</th>
+                <th>Sponsor</th>
+                <th>Points</th>
+            </tr>
+        </thead>
+        <tbody id="driverTableMain"></tbody>
+    </table>
+    <div id="racerInfo"></div>
+</body>
+</html>
